@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+outputs/
+data/raw/
+checkpoints/
+release_assets/
+*.part
+.env
+.DS_Store
+Thumbs.db
+*.lock
+*.egg-info/
+build/
+dist/

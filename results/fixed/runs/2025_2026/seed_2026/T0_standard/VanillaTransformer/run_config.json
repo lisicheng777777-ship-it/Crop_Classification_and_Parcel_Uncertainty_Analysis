@@ -1,0 +1,17 @@
+{
+  "direction": "2025_2026_multiseed_internal",
+  "model": "VanillaTransformer",
+  "training_scheme": "T0_standard",
+  "training_ring_weights": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "common_classes": [
+    1,
+    2,
+    3
+  ],
+  "epochs": 50,
+  "seed": 2026
+}

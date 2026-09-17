@@ -1,0 +1,24 @@
+{
+  "unit_tests_passed": 9,
+  "raw_archive_verified": true,
+  "raw_archive_files": 491,
+  "data_release_parts": 9,
+  "checkpoint_load_and_forward_passes": 350,
+  "fixed_reproduced_metric_rows": 150,
+  "spatial_reproduced_metric_rows": 100,
+  "temporal_reproduced_metric_rows": 100,
+  "raster_feature_samples_checked": 96,
+  "training_smoke": "XGBoost / 2025_2026 / seed 42 / configured full tree count",
+  "duplicate_python_file_groups": 0,
+  "public_remote_created": false,
+  "license_assigned": true,
+  "feature_band_semantics_confirmed": false,
+  "remaining_publication_metadata": [
+    "Confirm actual feature-band names against manuscript",
+    "Specify data, weights and result-table licensing",
+    "Publish real repository and complete data release, then fill actual availability URLs"
+  ],
+  "code_license": "GPL-3.0-only",
+  "data_license_assigned": false,
+  "tempcnn_source_verified": true
+}

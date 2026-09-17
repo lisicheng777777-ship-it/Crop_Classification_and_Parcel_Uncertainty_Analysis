@@ -1,0 +1,3 @@
+﻿year,fixed_train_parcels,fixed_test_parcels,fixed_test_positive_area_overlap,fixed_overlap_area_m2,fixed_test_within_30m,fixed_nearest_distance_min_m,fixed_nearest_distance_median_m,spatial_cv_groups,spatial_cv_groups_crossing_folds,spatial_cv_isolation_rule
+2021_2022,560,231,7,30950.862784761906,176,0.0,0.0,270,0,connected components of parcel geometries buffered by 15 m; each component belongs to one fold
+2025_2026,317,138,3,4.57913248947708,85,0.0,6.604519530182106,194,0,connected components of parcel geometries buffered by 15 m; each component belongs to one fold

@@ -1,0 +1,45 @@
+{
+  "primary_season": "2025_2026",
+  "transfer_season": "2021_2022",
+  "models": [
+    "XGBoost",
+    "LSTM",
+    "TempCNN",
+    "VanillaTransformer",
+    "STSMamba"
+  ],
+  "seeds": [
+    42,
+    3407,
+    2025,
+    2026,
+    2027
+  ],
+  "classes": {
+    "1": "wheat",
+    "2": "rapeseed",
+    "3": "vegetables"
+  },
+  "probability_class_order": [
+    1,
+    2,
+    3
+  ],
+  "d0_candidates": [
+    0.5,
+    0.75,
+    1,
+    1.5,
+    2,
+    3,
+    4,
+    5,
+    6,
+    8,
+    10,
+    12
+  ],
+  "spatial_buffer_m": 30,
+  "bootstrap_repeats": 5000,
+  "bootstrap_seed": 20260914
+}

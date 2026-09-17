@@ -1,0 +1,17 @@
+{
+  "direction": "2021_2022_multiseed_internal",
+  "model": "TempCNN",
+  "training_scheme": "T0_standard",
+  "training_ring_weights": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "common_classes": [
+    1,
+    2,
+    3
+  ],
+  "epochs": 50,
+  "seed": 2025
+}

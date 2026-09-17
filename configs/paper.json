@@ -1,0 +1,32 @@
+{
+  "models": [
+    "XGBoost",
+    "LSTM",
+    "TempCNN",
+    "VanillaTransformer",
+    "STSMamba"
+  ],
+  "seeds": [
+    42,
+    3407,
+    2025,
+    2026,
+    2027
+  ],
+  "epochs": 50,
+  "device": "cpu",
+  "output_root": "outputs",
+  "split_seed": 20260817,
+  "datasets": {
+    "2025_2026": {
+      "directory": "data/processed/2025_2026",
+      "fixed_raster": "data/raw/image/2025-2026/Fusion_202511_202605.tif",
+      "generalization_raster": "data/raw/image/2025-2026/Fusion_202511_202605_parcel_mask.tif"
+    },
+    "2021_2022": {
+      "directory": "data/processed/2021_2022",
+      "fixed_raster": "data/raw/image/2021-2022/S1S2_Fusion_2021_2022.tif",
+      "generalization_raster": "data/raw/image/2021-2022/S1S2_Fusion_2021_2022.tif"
+    }
+  }
+}

@@ -1,0 +1,74 @@
+[
+  {
+    "year": "2025_2026",
+    "raster": "data/raw/image/2025-2026/Fusion_202511_202605.tif",
+    "split": "train",
+    "sampled_pixels": 12,
+    "max_absolute_difference": 4.985103607135777e-07,
+    "bands": 77,
+    "crs": "EPSG:4326"
+  },
+  {
+    "year": "2025_2026",
+    "raster": "data/raw/image/2025-2026/Fusion_202511_202605.tif",
+    "split": "test",
+    "sampled_pixels": 12,
+    "max_absolute_difference": 4.977188110266706e-07,
+    "bands": 77,
+    "crs": "EPSG:4326"
+  },
+  {
+    "year": "2025_2026",
+    "raster": "data/raw/image/2025-2026/Fusion_202511_202605_parcel_mask.tif",
+    "split": "train",
+    "sampled_pixels": 12,
+    "max_absolute_difference": 4.985103607135777e-07,
+    "bands": 77,
+    "crs": "EPSG:4326"
+  },
+  {
+    "year": "2025_2026",
+    "raster": "data/raw/image/2025-2026/Fusion_202511_202605_parcel_mask.tif",
+    "split": "test",
+    "sampled_pixels": 12,
+    "max_absolute_difference": 4.977188110266706e-07,
+    "bands": 77,
+    "crs": "EPSG:4326"
+  },
+  {
+    "year": "2021_2022",
+    "raster": "data/raw/image/2021-2022/S1S2_Fusion_2021_2022.tif",
+    "split": "train",
+    "sampled_pixels": 12,
+    "max_absolute_difference": 4.997558598063279e-07,
+    "bands": 77,
+    "crs": "EPSG:4326"
+  },
+  {
+    "year": "2021_2022",
+    "raster": "data/raw/image/2021-2022/S1S2_Fusion_2021_2022.tif",
+    "split": "test",
+    "sampled_pixels": 12,
+    "max_absolute_difference": 4.995117173223207e-07,
+    "bands": 77,
+    "crs": "EPSG:4326"
+  },
+  {
+    "year": "2021_2022",
+    "raster": "data/raw/image/2021-2022/S1S2_Fusion_2021_2022.tif",
+    "split": "train",
+    "sampled_pixels": 12,
+    "max_absolute_difference": 4.997558598063279e-07,
+    "bands": 77,
+    "crs": "EPSG:4326"
+  },
+  {
+    "year": "2021_2022",
+    "raster": "data/raw/image/2021-2022/S1S2_Fusion_2021_2022.tif",
+    "split": "test",
+    "sampled_pixels": 12,
+    "max_absolute_difference": 4.995117173223207e-07,
+    "bands": 77,
+    "crs": "EPSG:4326"
+  }
+]

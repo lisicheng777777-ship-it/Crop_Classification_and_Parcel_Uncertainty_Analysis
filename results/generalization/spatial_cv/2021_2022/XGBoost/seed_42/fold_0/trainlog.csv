@@ -1,0 +1,13 @@
+epoch,report,confusion_matrix,accuracy,balanced_accuracy,kappa,f1_micro,f1_macro,f1_weighted,recall_micro,recall_macro,recall_weighted,precision_micro,precision_macro,precision_weighted,ECE,Brier,NLL,Entropy,Epistemic,Aleatoric,train_loss,test_loss
+0,"              precision    recall  f1-score   support
+
+     class 0   0.977273  0.959554  0.968332       717
+     class 1   0.976793  0.956612  0.966597       484
+     class 2   0.964651  0.985741  0.975082      1052
+
+    accuracy                       0.971150      2253
+   macro avg   0.972906  0.967302  0.970004      2253
+weighted avg   0.971276  0.971150  0.971111      2253
+","[[ 688    4   25]
+ [   8  463   13]
+ [   8    7 1037]]",0.9711495783399912,0.9673022370234078,0.9543916472667533,0.9711495783399912,0.970003837733351,0.9711112730851471,0.9711495783399912,0.9673022370234078,0.9711495783399912,0.9711495783399912,0.9729057130028576,0.9712762988015139,0.02078826724119364,0.04920066965141422,0.14417806099741848,0.028158076898950814,0.0,0.028158076898950814,,0.15613605082035065

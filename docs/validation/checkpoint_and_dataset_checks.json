@@ -1,0 +1,32 @@
+{
+  "python_files": 29,
+  "duplicate_code_groups": [],
+  "datasets": {
+    "2025_2026": {
+      "train": {
+        "pixels": 9035,
+        "parcels": 317
+      },
+      "test": {
+        "pixels": 4860,
+        "parcels": 138
+      }
+    },
+    "2021_2022": {
+      "train": {
+        "pixels": 10751,
+        "parcels": 560
+      },
+      "test": {
+        "pixels": 4638,
+        "parcels": 231
+      }
+    }
+  },
+  "fixed_configurations": 50,
+  "spatial_configurations": 50,
+  "spatial_training_folds": 250,
+  "temporal_configurations": 50,
+  "checkpoint_forward_checks": 350,
+  "scope": "syntax, content duplicate scan, data alignment, split structure, experiment matrix and optional checkpoint load/forward"
+}

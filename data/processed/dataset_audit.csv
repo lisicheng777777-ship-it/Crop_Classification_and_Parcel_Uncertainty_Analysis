@@ -1,0 +1,5 @@
+year,split,pixels,parcels,metadata_aligned
+2021_2022,train,10751,560,True
+2021_2022,test,4638,231,True
+2025_2026,train,9035,317,True
+2025_2026,test,4860,138,True

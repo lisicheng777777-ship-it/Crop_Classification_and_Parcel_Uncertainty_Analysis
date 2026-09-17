@@ -1,0 +1,10 @@
+{
+  "fixed/2021_2022": {
+    "rows": 75,
+    "max_absolute_error": 0.0
+  },
+  "fixed/2025_2026": {
+    "rows": 75,
+    "max_absolute_error": 0.0
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "temporal/both": {
+    "rows": 100,
+    "max_absolute_error": 5.805512737211416e-10
+  }
+}

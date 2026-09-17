@@ -1,0 +1,10 @@
+{
+  "spatial/2021_2022": {
+    "rows": 50,
+    "max_absolute_error": 1.4353850052994943e-10
+  },
+  "spatial/2025_2026": {
+    "rows": 50,
+    "max_absolute_error": 2.5897939348595855e-10
+  }
+}

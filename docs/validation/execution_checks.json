@@ -1,0 +1,13 @@
+{
+  "new_prediction": {
+    "pixels": 4860,
+    "maximum_probability_difference": 0.0
+  },
+  "archived_prediction": {
+    "pixels": 4860,
+    "maximum_probability_difference": 2.0000000000575113e-07
+  },
+  "fixed_dry_run": "passed",
+  "spatial_dry_run": "passed",
+  "temporal_dry_run": "passed"
+}
