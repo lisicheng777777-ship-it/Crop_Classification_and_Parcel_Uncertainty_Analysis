@@ -253,9 +253,9 @@ def train_epoch(model, X_train, y_train, X_test, y_test,model_save_path,
             y_score.cpu().numpy(),
             Classes
         )
-        # 在 train_epoch 中，scores = metrics(...) 之后，添加：
-        scores["Epistemic"] = epistemic.mean().item()  # 已有，但确保存在
-        # 计算 Aleatoric
+        # Record uncertainty scores after computing classification metrics.
+        scores["Epistemic"] = epistemic.mean().item()  # Mean epistemic uncertainty.
+        # Compute aleatoric uncertainty.
         if "Entropy" in scores and "Epistemic" in scores:
             aleatoric = max(0.0, scores["Entropy"] - scores["Epistemic"])
             scores["Aleatoric"] = aleatoric

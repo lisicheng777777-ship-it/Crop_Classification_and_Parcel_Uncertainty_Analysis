@@ -188,7 +188,7 @@ def inference(model, X, n_classes, device, batch_size_list=None, return_epistemi
     dataloader = DataLoader(X, batch_size_list[2], shuffle=False)
 
     original_mode = model.training
-    model.eval()  # 默认关闭 Dropout
+    model.eval()  # Disable dropout by default.
 
     y_predict_array = np.zeros((X.shape[0], n_classes), dtype=np.float32)
     epistemic_array = np.zeros((X.shape[0],), dtype=np.float32) if return_epistemic else None
@@ -207,12 +207,12 @@ def inference(model, X, n_classes, device, batch_size_list=None, return_epistemi
                 logits = logits / max(float(temperature), 1e-6)
                 mean_prob = F.softmax(logits, dim=1)
 
-            # 直接保存Softmax概率
+            # Save softmax probabilities directly.
             y_predict_array[start:start + batch_size, :] = mean_prob.cpu().numpy()
 
             start += batch_size
 
-    # 恢复原始模式
+    # Restore the original mode.
     if original_mode:
         model.train()
     else:

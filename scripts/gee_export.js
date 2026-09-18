@@ -1,15 +1,15 @@
 /**
  * GEE Code Editor script
- * 生成 2021-11 至 2022-05 的 7 个 S1/S2 月合成，以及 1 个 77 波段时序影像。
- * 此历史导出脚本声明的单月波段顺序（尚未独立核实全部归档波段语义）：
+ * Generate seven monthly S1/S2 composites for November 2021 through May 2022 and one 77-band time-series image.
+ * Monthly band order declared by this historical script (archived band semantics are not fully verified):
  * B2, B3, B4, B8, NDVI, EVI, GNDVI, YCI, SAVI, VV, VH
  *
- * 使用方法：复制到 https://code.earthengine.google.com/ 运行，然后在 Tasks 中
- * 点击 8 个 Run。文件会输出到 Google Drive/S1S2_Fusion_2021_2022。
+ * Usage: paste into https://code.earthengine.google.com/ and run, then start
+ * all eight export tasks in Tasks. Outputs are saved to Google Drive/S1S2_Fusion_2021_2022.
  */
 
-// 现有 GeoTIFF 的精确外包矩形。若你在 GEE 中有原始遂宁矢量边界，建议将下一行
-// 替换为：var roi = ee.FeatureCollection('projects/你的项目/assets/边界').geometry();
+// Exact bounding rectangle of the existing GeoTIFF. If the original Suining boundary is available in GEE,
+// replace the next line with: var roi = ee.FeatureCollection('projects/YOUR_PROJECT/assets/BOUNDARY').geometry();
 var roi = ee.Geometry.Rectangle(
   [103.90067289724686, 30.67836528695842,
    104.32575568889245, 30.96708380028179],
@@ -18,13 +18,13 @@ var roi = ee.Geometry.Rectangle(
 
 var outputFolder = 'S1S2_Fusion_2021_2022';
 var outputCrs = 'EPSG:4326';
-// 与现有文件的像元大小 0.000089831528412° 完全一致。
+// Match the existing pixel size of 0.000089831528412 degrees.
 var outputTransform = [
   0.000089831528412, 0, 103.90067289724686,
   0, -0.000089831528412, 30.96708380028179
 ];
 
-// Sentinel-2 SR：按 SCL 去除无效像元、云、云影和雪，并转换为 0~1 反射率。
+// Sentinel-2 SR: mask invalid pixels, clouds, cloud shadows and snow using SCL; scale reflectance to 0-1.
 function maskS2(image) {
   var scl = image.select('SCL');
   var good = scl.neq(0)   // No data
@@ -51,7 +51,7 @@ function addIndices(optical) {
     .divide(b8.add(b4.multiply(6)).subtract(b2.multiply(7.5)).add(1))
     .rename('EVI');
   var gndvi = b8.subtract(b3).divide(b8.add(b3)).rename('GNDVI');
-  // 与现有影像像元值一致：YCI = (green - red) / (green + red)。
+  // Historical YCI formula: (green - red) / (green + red).
   var yci = b3.subtract(b4).divide(b3.add(b4)).rename('YCI');
   var savi = b8.subtract(b4).multiply(1.5)
     .divide(b8.add(b4).add(0.5)).rename('SAVI');
@@ -118,7 +118,7 @@ months.forEach(function(item) {
   });
 });
 
-// 把 7 个月按时间顺序堆叠。给每月波段添加 YYYYMM 后缀，避免 GEE 自动产生 _1、_2。
+// Stack seven months chronologically. Add YYYYMM suffixes to avoid automatic _1 and _2 suffixes.
 var baseBandNames = ['B2', 'B3', 'B4', 'B8', 'NDVI', 'EVI', 'GNDVI',
                      'YCI', 'SAVI', 'VV', 'VH'];
 var timeStack = ee.Image([]);

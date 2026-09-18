@@ -4,7 +4,7 @@ Reproducible training, inference and numerical analysis for boundary-reliability
 
 The repository contains one selected implementation of the five experimental models (XGBoost, LSTM, TempCNN, VanillaTransformer and STSMamba), five seeds (`42, 3407, 2025, 2026, 2027`), the experimental feature tables and parcel splits, and archived probabilities and reference metrics. It does not bundle historical source trees, unused model variants or paper-layout scripts.
 
-中文说明：本目录已按论文实际五模型试验整理。先看下面的复算命令；数据附件和GitHub发布步骤见 [Publication guide](docs/PUBLICATION.md)，检查结果见 [Validation](docs/VALIDATION.md)。本地整理不等于已经公开发布。
+This repository is organized around the five-model experiments reported in the manuscript. Start with the reproduction commands below. See the [Publication guide](docs/PUBLICATION.md) for data attachments and GitHub publication steps, and [Validation](docs/VALIDATION.md) for verification results. Local preparation alone does not establish public availability.
 
 ## Recompute the archived results
 

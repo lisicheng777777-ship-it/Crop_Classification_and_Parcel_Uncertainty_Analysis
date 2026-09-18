@@ -148,7 +148,7 @@ def metrics(y_true, y_pred, y_prob, Classes, n_classes=None):
         precision_micro = _precision_score(y_true, y_pred, average="micro")
         precision_macro = _precision_score(y_true, y_pred, average="macro", labels=labels)
         precision_weighted = _precision_score(y_true, y_pred, average="weighted")
-    # 使用传入的 n_classes，若未提供则自动推断
+    # Use the supplied n_classes, or infer it when omitted.
     y_prob = sanitize_probabilities(y_prob, n_classes=n_classes)
     ece = compute_ece(y_true, y_prob)
     brier = compute_brier(y_true, y_prob, n_classes)

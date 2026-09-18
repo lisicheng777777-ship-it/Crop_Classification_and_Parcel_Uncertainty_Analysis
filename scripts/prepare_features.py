@@ -17,11 +17,11 @@ except ImportError:
         shapely_make_valid = None
 
 
-# 该代码实现了数据集的划分和保存，将输入的矢量地块数据 train_feature 按比例分为训练、测试和预测集。
-# 训练和测试集数据从栅格影像中抽样提取并保存为 CSV 格式，
-# 预测集则直接保存为矢量文件，
-# 以便后续的模型训练、测试和验证。
-# 在论文中，可以描述为在训练、验证和测试集的划分中，以地块为单位进行划分，减少空间上相邻像素间的自相关性，使模型训练更加客观。
+# Split input vector parcels (train_feature) into training, test and prediction subsets.
+# Sample training and test pixels from rasters and save them as CSV tables.
+# Save the prediction subset as vector features.
+# These outputs support model training, testing and validation.
+# Split by parcel to keep pixels from the same parcel together and reduce spatial leakage.
 
 def main(rasters_folder, stacked_raster, train_feature, output_dir, train_ratio, predict_ratio, pixel_ratio, cache,
          inner_buffer_pixels=0, split_lists=None):
@@ -29,21 +29,21 @@ def main(rasters_folder, stacked_raster, train_feature, output_dir, train_ratio,
     inner_buffer_pixels = float(inner_buffer_pixels or 0)
 
     # Define predict_shapefile output path at the start
-    # 单独保存训练、验证（这里定义为test_set）、测试（这里定义为predict_set）集中的【测试集】，在分类完成后，ENVI中建立混淆矩阵验证精度
+    # Save held-out parcels for post-classification confusion-matrix evaluation in ENVI.
     predict_shapefile = train_feature.replace(".shp", "_predict_samples.shp")
     if output_dir:
         os.makedirs(output_dir, exist_ok=True)
-        predict_shapefile = os.path.join(output_dir, "predict_samples.shp")  # 更新路径
+        predict_shapefile = os.path.join(output_dir, "predict_samples.shp")  # Output path.
 
     test_shapefile = train_feature.replace(".shp", "_test_samples.shp")
     if output_dir:
         os.makedirs(output_dir, exist_ok=True)
-        test_shapefile = os.path.join(output_dir, "test_samples.shp")  # 更新路径
+        test_shapefile = os.path.join(output_dir, "test_samples.shp")  # Output path.
 
     train_shapefile = train_feature.replace(".shp", "_train_samples.shp")
     if output_dir:
         os.makedirs(output_dir, exist_ok=True)
-        train_shapefile = os.path.join(output_dir, "train_samples.shp")  # 更新路径
+        train_shapefile = os.path.join(output_dir, "train_samples.shp")  # Output path.
 
     # stacking rasters if rasters_folder is provided.
     if rasters_folder:
@@ -60,17 +60,17 @@ def main(rasters_folder, stacked_raster, train_feature, output_dir, train_ratio,
         train_csv = os.path.join(output_dir, os.path.basename(train_csv))
         test_csv = os.path.join(output_dir, os.path.basename(test_csv))
 
-    # split_train_feature按照[矢量块]将样本划分为 train_list 和 test_list, 意味着train和test样本为独立地块中提取的像素
+    # Split by vector parcel so training and test pixels come from separate parcels.
     if split_lists is None:
         train_list, test_list, predict_list = split_train_feature(train_feature, train_ratio, predict_ratio)
     else:
         train_list, test_list, predict_list = split_lists
 
-    # 保存predict_list为矢量文件
+    # Save predict_list as vector features.
     # Vector outputs are saved after CRS normalization and optional inward buffering.
 
-    # generate_training_data 函数会分别针对 train_list 和 test_list 中的矢量块，从栅格影像中提取每个矢量块区域内的像素值。
-    # 先统一投影一次，不要在 generate_training_data 里面反复生成
+    # Extract raster pixel values within parcels in train_list and test_list.
+    # Reproject once here rather than repeatedly inside generate_training_data.
     train_feature_for_extract = prepare_reprojected_shp(stacked_raster, train_feature, output_dir)
     buffer_distance = pixel_buffer_distance(stacked_raster, inner_buffer_pixels)
     save_split_assignments(train_feature_for_extract, train_list, test_list, predict_list, output_dir)
@@ -126,7 +126,7 @@ def stack(rasters, out_raster):
     out_raster.close()
 
 
-def interpolation(input_raster, output_raster, n_channels, threshold, cache="50%"):  # 插值
+def interpolation(input_raster, output_raster, n_channels, threshold, cache="50%"):  # Interpolate missing values.
     os.environ["GDAL_CACHEMAX"] = cache
     src = rio.open(input_raster, 'r')
     meta = src.meta.copy()
@@ -143,7 +143,7 @@ def interpolation(input_raster, output_raster, n_channels, threshold, cache="50%
     array = src.read()
     # Reshape array
     n_pixels = height * width
-    array = array.transpose(1, 2, 0).reshape(n_pixels, int(count / n_channels), n_channels)  # [像素数, 时间步数, 通道数]
+    array = array.transpose(1, 2, 0).reshape(n_pixels, int(count / n_channels), n_channels)  # [pixels, time steps, channels]
     # Loop through every pixel
     out_array = np.zeros((n_pixels, threshold, n_channels), dtype=dtype)
     for i, arr in tqdm(enumerate(array), total=n_pixels):
@@ -355,25 +355,25 @@ def save_split_assignments(train_feature, train_list, test_list, predict_list, o
     os.makedirs(output_dir, exist_ok=True)
     pd.DataFrame(rows).to_csv(os.path.join(output_dir, "split_assignments.csv"), index=False)
 
-# 从给定的栅格数据（input_raster）和地理信息系统矢量数据（train_feature）中提取样本，
-# 形成一个包含像素值的数据集，并将这个数据集以 CSV 格式保存到指定路径（out_csv）
+# Extract samples from input_raster using vector features in train_feature.
+# Save the resulting pixel-value dataset to out_csv.
 def generate_training_data(input_raster, train_feature, sample_list, out_csv, pixel_ratio=0.8,
                            inner_buffer_pixels=0, write_distance_metadata=False):
     # read input_raster and train_feature
-    src = rio.open(input_raster)  # 使用 Rasterio 打开栅格数据，获取源数据的元信息
+    src = rio.open(input_raster)  # Open the raster with Rasterio to access its metadata.
     shp = fiona.open(train_feature, "r")
     buffer_distance = pixel_buffer_distance(input_raster, inner_buffer_pixels)
     if not 0 < pixel_ratio <= 1:
         raise ValueError(f"pixel_ratio must be in (0, 1], got {pixel_ratio}")
 
     # generate empty array to store data
-    # 创建一个空数组 out_images 用于存储样本数据，
-    # 数组的行数为源数据的像素数量的三分之一，列数为源数据的波段数加一（额外的一列用于存储类别标签）
+    # Allocate out_images to store sampled data.
+    # Reserve rows based on raster size and columns for features and labels.
     out_images = np.zeros(shape=(int(src.width * src.height / 3), src.count + 2), dtype=np.float32)
     print(src)
     print(f"Preallocated sample array: shape={out_images.shape}, dtype={out_images.dtype}")
 
-    row0 = 0  # 初始化一个变量 row0 用于记录当前数据写入的行数
+    row0 = 0  # Track the next output row.
     masked_pixel_count = 0
     nonfinite_pixel_count = 0
     empty_geometry_count = 0
@@ -381,7 +381,7 @@ def generate_training_data(input_raster, train_feature, sample_list, out_csv, pi
     pixel_size = pixel_buffer_distance(input_raster, 1)
 
     # loop through every feature(polygon) to extract pixels' value within it.
-    # 使用 tqdm 进行循环遍历样本列表，每个样本代表一个地理信息系统矢量数据的要素（polygon）
+    # Iterate over polygon features with a tqdm progress bar.
     with tqdm(sample_list, desc="Generating test/train datasets") as samples:
         for i in samples:
             # Masking raster using feature
@@ -390,8 +390,8 @@ def generate_training_data(input_raster, train_feature, sample_list, out_csv, pi
                 empty_geometry_count += 1
                 continue
             shape = [geometry]
-            # 保留布尔掩膜。若栅格没有设置 nodata，filled=True 会把多边形外
-            # 的像元填成 0，导致这些假像元被错误写入训练集。
+            # Preserve the boolean mask: without nodata metadata, filled=True may fill
+            # pixels outside the polygon with zero and incorrectly include them as samples.
             masked_image, masked_transform = rio.mask.mask(
                 src,
                 shape,
@@ -399,15 +399,15 @@ def generate_training_data(input_raster, train_feature, sample_list, out_csv, pi
                 filled=False,
             )
 
-            # [bands, rows, cols] -> [pixels, bands]。任意波段被掩膜的
-            # 像元均不作为样本，从而同时排除多边形外和 nodata 像元。
+            # Reshape [bands, rows, cols] to [pixels, bands]. Exclude pixels masked
+            # in any band, removing both outside-polygon and nodata pixels.
             out_image = masked_image.data.transpose(1, 2, 0).reshape(-1, src.count)
             pixel_mask = np.ma.getmaskarray(masked_image).transpose(1, 2, 0).reshape(-1, src.count)
             valid_mask = ~pixel_mask.any(axis=1)
             masked_pixel_count += int((~valid_mask).sum())
             out_image = out_image[valid_mask]
 
-            # NaN/Inf 不一定能通过 nodata 元数据识别，需要单独删除。
+            # Remove NaN/Inf explicitly because nodata metadata may not identify them.
             finite_mask = np.isfinite(out_image).all(axis=1)
             nonfinite_pixel_count += int((~finite_mask).sum())
             out_image = out_image[finite_mask]
@@ -459,7 +459,7 @@ def generate_training_data(input_raster, train_feature, sample_list, out_csv, pi
             out_images[row0:row1, :] = out_image
             row0 += out_image.shape[0]
 
-    # Delete zero_rows 删除 out_images 中全零的行
+    # Delete all-zero rows from out_images.
     out_images = out_images[:row0]
     print(
         "Pixel filtering summary: "
@@ -551,16 +551,16 @@ def generate_training_data(input_raster, train_feature, sample_list, out_csv, pi
 
 
 def save_predict_as_vector(train_feature, predict_list, output_shp, buffer_distance=0.0):
-    # 读取原始矢量数据
+    # Read the original vector data.
     with fiona.open(train_feature, "r") as src:
-        # 定义输出shapefile的schema
+        # Define the output shapefile schema.
         schema = src.schema.copy()
         crs = src.crs
 
-        # 创建输出shapefile
+        # Create the output shapefile.
         with fiona.open(output_shp, "w", driver="ESRI Shapefile", schema=schema, crs=crs) as dst:
             for i in predict_list:
-                # 复制并写入predict_list中的样本
+                # Copy and write the selected samples.
                 feature = dict(src[i])
                 geometry = inner_buffer_geometry(feature.get("geometry"), buffer_distance)
                 if geometry is None:
@@ -570,16 +570,16 @@ def save_predict_as_vector(train_feature, predict_list, output_shp, buffer_dista
 
 
 def save_test_as_vector(train_feature, test_list, output_shp, buffer_distance=0.0):
-    # 读取原始矢量数据
+    # Read the original vector data.
     with fiona.open(train_feature, "r") as src:
-        # 定义输出shapefile的schema
+        # Define the output shapefile schema.
         schema = src.schema.copy()
         crs = src.crs
 
-        # 创建输出shapefile
+        # Create the output shapefile.
         with fiona.open(output_shp, "w", driver="ESRI Shapefile", schema=schema, crs=crs) as dst:
             for i in test_list:
-                # 复制并写入predict_list中的样本
+                # Copy and write the selected samples.
                 feature = dict(src[i])
                 geometry = inner_buffer_geometry(feature.get("geometry"), buffer_distance)
                 if geometry is None:
@@ -589,16 +589,16 @@ def save_test_as_vector(train_feature, test_list, output_shp, buffer_distance=0.
 
 
 def save_train_as_vector(train_feature, train_list, output_shp, buffer_distance=0.0):
-    # 读取原始矢量数据
+    # Read the original vector data.
     with fiona.open(train_feature, "r") as src:
-        # 定义输出shapefile的schema
+        # Define the output shapefile schema.
         schema = src.schema.copy()
         crs = src.crs
 
-        # 创建输出shapefile
+        # Create the output shapefile.
         with fiona.open(output_shp, "w", driver="ESRI Shapefile", schema=schema, crs=crs) as dst:
             for i in train_list:
-                # 复制并写入predict_list中的样本
+                # Copy and write the selected samples.
                 feature = dict(src[i])
                 geometry = inner_buffer_geometry(feature.get("geometry"), buffer_distance)
                 if geometry is None:
@@ -625,7 +625,7 @@ if __name__ == "__main__":
                         help='ratio of train part', default=0.7)
     parser.add_argument('--predict_ratio', dest='predict_ratio', type=float,
                         help='ratio of predict part, for TF/Keras only', default=0.0)  # 0.1
-    parser.add_argument('--pixel_ratio', dest='pixel_ratio', type=float,  # 从样本中采像素的比例
+    parser.add_argument('--pixel_ratio', dest='pixel_ratio', type=float,  # Fraction of pixels sampled from the input samples.
                         help='ratio of extracted pixel values to keep', default=1.0)
     parser.add_argument('--split_seed', dest='split_seed', type=int,
                         help='random seed for a shared train/test/predict split across buffer variants',

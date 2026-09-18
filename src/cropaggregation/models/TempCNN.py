@@ -12,13 +12,13 @@ import torch.utils.data
 Pytorch re-implementation of Pelletier et al. 2019
 https://github.com/charlotte-pel/temporalCNN
 
-https://www.mdpi.com/2072-4292/11/5/523 在时间域应用卷积
+https://www.mdpi.com/2072-4292/11/5/523 Convolutions along the temporal dimension
 """
 
 __all__ = ['TempCNN']
 
 class TempCNN(torch.nn.Module):
-    def __init__(self, input_dim=13, num_classes=9, sequencelength=45, kernel_size=3, hidden_dims=32, dropout=0.5): # 0.18203942949809093   #origin code = hidden_dims=128,即卷积核个数128
+    def __init__(self, input_dim=13, num_classes=9, sequencelength=45, kernel_size=3, hidden_dims=32, dropout=0.5): # Original defaults: hidden_dims=128 filters and dropout=0.18203942949809093.
         super(TempCNN, self).__init__()
         self.modelname = f"TempCNN_input-dim={input_dim}_num-classes={num_classes}_sequencelenght={sequencelength}_" \
                          f"kernelsize={kernel_size}_hidden-dims={hidden_dims}_dropout={dropout}"
