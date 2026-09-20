@@ -4,7 +4,7 @@ Reproducible training, inference and numerical analysis for boundary-reliability
 
 The repository contains one selected implementation of the five experimental models (XGBoost, LSTM, TempCNN, VanillaTransformer and STSMamba), five seeds (`42, 3407, 2025, 2026, 2027`), the experimental feature tables and parcel splits, and archived probabilities and reference metrics. It does not bundle historical source trees, unused model variants or paper-layout scripts.
 
-This repository is organized around the five-model experiments reported in the manuscript. Start with the reproduction commands below. See the [Publication guide](docs/PUBLICATION.md) for data attachments and GitHub publication steps, and [Validation](docs/VALIDATION.md) for verification results. Local preparation alone does not establish public availability.
+This repository is organized around the five-model experiments reported in the manuscript. Start with the reproduction commands below. See the [Publication guide](docs/PUBLICATION.md) for data attachments and GitHub publication steps, and [Validation](docs/VALIDATION.md) for verification results. The [public code repository](https://github.com/lisicheng777777-ship-it/Crop_Classification_and_Parcel_Uncertainty_Analysis) and [data/model release v1.0.0](https://github.com/lisicheng777777-ship-it/Crop_Classification_and_Parcel_Uncertainty_Analysis/releases/tag/v1.0.0) are available online.
 
 ## Recompute the archived results
 
@@ -30,7 +30,7 @@ python scripts/data_archive.py restore --directory release_assets
 python train.py --experiment fixed --years 2021_2022 2025_2026 --dry-run
 ```
 
-Raw images and checkpoints may already be present in a local complete copy. A Git clone alone contains the processed tables and probabilities; download **all** `crop-data.zip.NNN` files from the project's actual release into `release_assets/` before restoring. Release URLs have not been invented: until publication they remain unset in `manifests/data_release.json`.
+Raw images and checkpoints may already be present in a local complete copy. A Git clone alone contains the processed tables and probabilities; download **all** `crop-data.zip.NNN` files from the project's actual release into `release_assets/` before restoring. Download links are configured in `manifests/data_release.json`. To download and restore all nine parts automatically, run `python scripts/data_archive.py restore --directory release_assets --download`. Data and model attachments are hosted in [release v1.0.0](https://github.com/lisicheng777777-ship-it/Crop_Classification_and_Parcel_Uncertainty_Analysis/releases/tag/v1.0.0).
 
 ```bash
 # Small executable example: one model and one seed on the primary season.
@@ -80,4 +80,4 @@ The full historical model collection has been load-tested, but all 350 models ha
 
 ## Availability and attribution
 
-Publication status and an English manuscript statement are in [DATA_AND_CODE_AVAILABILITY.md](docs/DATA_AND_CODE_AVAILABILITY.md). Insert the real repository/release URL and citation metadata after publication. The research software is distributed under [GNU GPL version 3](LICENSE). Verified TempCNN provenance and modification notices are recorded in [THIRD_PARTY_NOTICES.md](docs/THIRD_PARTY_NOTICES.md). The code license does not license datasets, trained weights or result tables; their reuse terms remain to be specified separately.
+Publication status and an English manuscript statement are in [DATA_AND_CODE_AVAILABILITY.md](docs/DATA_AND_CODE_AVAILABILITY.md). Use the [code repository](https://github.com/lisicheng777777-ship-it/Crop_Classification_and_Parcel_Uncertainty_Analysis) and [data/model release v1.0.0](https://github.com/lisicheng777777-ship-it/Crop_Classification_and_Parcel_Uncertainty_Analysis/releases/tag/v1.0.0) when citing availability. The research software is distributed under [GNU GPL version 3](LICENSE). Verified TempCNN provenance and modification notices are recorded in [THIRD_PARTY_NOTICES.md](docs/THIRD_PARTY_NOTICES.md). The code license does not license datasets, trained weights or result tables; their reuse terms remain to be specified separately.

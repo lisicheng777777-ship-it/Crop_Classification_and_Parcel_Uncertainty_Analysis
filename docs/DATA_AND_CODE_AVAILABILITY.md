@@ -1,13 +1,27 @@
 # Data and code availability
 
-Current status: the local repository and release attachment are prepared; a public repository URL, public data-release URL and DOI have not been supplied or created. Do not describe the materials as publicly available until those URLs resolve and the complete attachment has been uploaded.
+The [code repository](https://github.com/lisicheng777777-ship-it/Crop_Classification_and_Parcel_Uncertainty_Analysis) and [data/model release v1.0.0](https://github.com/lisicheng777777-ship-it/Crop_Classification_and_Parcel_Uncertainty_Analysis/releases/tag/v1.0.0) are publicly accessible.
 
-## Manuscript statement after publication
+## Manuscript statement
 
-> The code, processed experimental data, fixed data splits, archived predictions and reference metrics supporting this study are available at **[insert the actual repository URL and tagged version]**. Full-resolution input rasters, original vector data and the 350 trained model checkpoints are available in the accompanying data release at **[insert the actual release URL or persistent repository DOI]**. File-level SHA256 manifests and scripts for data restoration and numerical reproduction are included. The repository documents the experimental protocol, software environment and reproducibility limitations.
+The source code, processed experimental data, fixed data splits, archived predictions and reference metrics supporting this study are publicly available at https://github.com/lisicheng777777-ship-it/Crop_Classification_and_Parcel_Uncertainty_Analysis. Full-resolution input rasters, original vector data and 350 trained model checkpoints are available in release v1.0.0 at https://github.com/lisicheng777777-ship-it/Crop_Classification_and_Parcel_Uncertainty_Analysis/releases/tag/v1.0.0. File-level SHA-256 manifests and scripts for data restoration and numerical reproduction are included. The source code is licensed under the GNU General Public License version 3 (GPL-3.0).
 
-Code license sentence: "The source code is available under the GNU General Public License version 3 (GPL-3.0)." Data, weights and result-table licensing is separate and must be specified before claiming an open-data license. Cite the manuscript's actual authors/title and tagged repository version; no placeholder author identities or DOI have been fabricated.
+## Downloads and verification
 
-## Before citing availability
+Download all nine crop-data.zip parts into release_assets/ and run:
 
-Ensure the repository and all archive parts are publicly accessible, verify a fresh downloaded copy, and replace the two bracketed fields above with the actual URLs. The original feature-name discrepancy described in `METHODS_AND_LIMITATIONS.md` must be resolved in the manuscript independently of uploading the files.
+```bash
+python scripts/data_archive.py restore --directory release_assets
+```
+
+With the updated download manifest, automatic downloading is also available:
+
+```bash
+python scripts/data_archive.py restore --directory release_assets --download
+```
+
+On 2026-09-20, all nine public download endpoints were accessible and GitHub's reported asset sizes and SHA-256 digests matched the locally verified archive parts. This check did not re-download the complete 17.46 GB archive. The restoration script verifies downloaded parts and extracted files before use.
+
+The v1.0.0 tag preserves its original source snapshot; later documentation and download-link updates are on main. Cite the exact source commit or a subsequent version tag when using those updates.
+
+Data, weights and result-table reuse terms remain separate from the code license. No data license or DOI is asserted here. The feature-name discrepancy documented in METHODS_AND_LIMITATIONS.md must be resolved independently in the manuscript.
